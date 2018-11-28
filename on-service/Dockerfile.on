@@ -5,4 +5,4 @@ COPY on.jar .
 COPY on-entrypoint.sh .
 RUN chmod +x on-entrypoint.sh
 ENTRYPOINT ["sh","on-entrypoint.sh"]
-EXPOSE 8084
+EXPOSE 8083
