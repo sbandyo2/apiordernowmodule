@@ -12,9 +12,12 @@ import org.springframework.web.client.RestTemplate;
 
 import com.ibm.bean.RequisitionDTO;
 import com.ibm.consants.ONServiceConstants;
+import com.ibm.input.handler.TransformInput;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @RestController
 public class ONServiceController {
@@ -25,6 +28,12 @@ public class ONServiceController {
 
 	@Autowired
 	private EurekaClient eurekaClient;
+	
+	@HystrixCommand(fallbackMethod="reliable", commandProperties = {
+			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "20"), //default value , number of request which will trip the circuit
+			@HystrixProperty(name="execution.isolation.thread.timeoutInMilliseconds",value="25000"),
+            @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "25000") })
+	
 
 	@RequestMapping(value = "/ordernow", method = RequestMethod.POST)
 	public String processTransaction(@RequestBody String json) {
@@ -34,6 +43,9 @@ public class ONServiceController {
 		String url = null;
 		String response = null;
 		Application aribaApplication = null;
+		TransformInput transformInput = null;
+		
+		transformInput = new TransformInput();
 		
 		
 		//perform transaction transform and update in Ariba service 
@@ -41,7 +53,7 @@ public class ONServiceController {
 		instanceInfo = aribaApplication.getInstances().get(0);
 		url = "http://" + instanceInfo.getIPAddr() + ":"+ instanceInfo.getPort() + "/" + "/ariba/";
 		
-		response = restTemplate.postForObject(url, transformRecievedData(json), String.class);
+		response = restTemplate.postForObject(url, transformInput.transformInput(json), String.class);
 
 		logger.info("Finishing order now transaction ");
 		
@@ -53,18 +65,17 @@ public class ONServiceController {
 		return new RestTemplate();
 	}
 	
-	/**
-	 * @param json
-	 * @return
-	 */
-	private RequisitionDTO transformRecievedData(String json){
-		RequisitionDTO requisitionDTO = null;
+	
+	public String reliable(@RequestBody String recievedData ) {
 		
-		requisitionDTO = new RequisitionDTO();
-		requisitionDTO.setApplicationType(ONServiceConstants.APP_TYPE);
+		logger.info(" Falling back for ON Transaction ");
 		
-		//TODO: complete the transformation of the recieved data
+		String response = "<returnData><error>Circuit broke at Ariba Service for ON transaction :"+new TransformInput().transformInput(recievedData).getApplicationTransactionNumber()+"</error></returnData>";
+
+
+		logger.info("Finishing Fall back ON  transaction ");
 		
-		return requisitionDTO;
+		return response.toString();
 	}
+	
 }
