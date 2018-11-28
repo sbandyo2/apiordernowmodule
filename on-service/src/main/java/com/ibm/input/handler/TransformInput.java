@@ -68,7 +68,7 @@ public class TransformInput {
 
 	private static final String UNIQUE_TRANSACTION_NUMBER = "UniqueTransactionNumber";
 	
-	private static final String ON_TYPE = "ON";
+	private static final String ON_TYPE = "ORDERNOW";
 
 	Logger logger = LoggerFactory.getLogger(TransformInput.class);
 	
@@ -101,12 +101,13 @@ public class TransformInput {
 			
 			if(jsonObject != null) {
 				requisitionDTO.setApplicationTransactionNumber((String)jsonObject.get(UNIQUE_TRANSACTION_NUMBER));
-				requisitionDTO.setRequesterName((String)jsonObject.get(REQUISITION_NAME));
+				requisitionDTO.setRequisitionName((String)jsonObject.get(REQUISITION_NAME));
 				requisitionDTO.setCo_cd((String)jsonObject.get(COMPANY_CODE));
 				requisitionDTO.setRequesterName((String)jsonObject.get(REQUESTER_NAME));
 				requisitionDTO.setCommentToSupplier((String)jsonObject.get(COMMENT_TO_SUPPLIER));
 				requisitionDTO.setPreparerWebId((String)jsonObject.get(PREPARER_WEB_ID));
 				requisitionDTO.setRequesterWebId((String)jsonObject.get(REQUESTER_WEB_ID));
+				
 				
 				Object lineItObject = jsonObject.get(LINE_ITEMS);
 				
@@ -129,6 +130,7 @@ public class TransformInput {
 	}
 	
 
+	
 	/**
 	 * @param lineItems
 	 * @param parlist
