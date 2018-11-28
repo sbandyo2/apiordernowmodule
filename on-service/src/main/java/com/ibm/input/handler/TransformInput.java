@@ -74,7 +74,7 @@ public class TransformInput {
 	
 	/**
 	 * The method parses the request data and transforms it into RequisitionDTO
-	 * for succeeding microservices
+	 * for succeeding micro-services
 	 * 
 	 * @param json
 	 * @return
