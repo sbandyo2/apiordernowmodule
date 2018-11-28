@@ -67,6 +67,8 @@ public class TransformInput {
 	private static final String REQUISITION_NAME = "RequisitionName";
 
 	private static final String UNIQUE_TRANSACTION_NUMBER = "UniqueTransactionNumber";
+	
+	private static final String ON_TYPE = "ON";
 
 	Logger logger = LoggerFactory.getLogger(TransformInput.class);
 	
@@ -94,6 +96,8 @@ public class TransformInput {
 			Object parseObject = jsonParser.parse(json);
 			
 			JSONObject jsonObject = ((JSONObject)parseObject);
+			
+			requisitionDTO.setApplicationType(ON_TYPE);
 			
 			if(jsonObject != null) {
 				requisitionDTO.setApplicationTransactionNumber((String)jsonObject.get(UNIQUE_TRANSACTION_NUMBER));
