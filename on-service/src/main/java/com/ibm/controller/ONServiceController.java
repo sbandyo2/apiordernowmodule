@@ -60,6 +60,28 @@ public class ONServiceController {
 		return response.toString();
 	}
 
+	
+	@RequestMapping(value = "/getSuppPartneringInfo", method = RequestMethod.POST)
+	public String getSuppPartneringInfo(@RequestBody String supplierIds) {
+		logger.info("Starting Order now Transaction ");
+		
+		InstanceInfo instanceInfo = null;
+		String url = null;
+		String response = null;
+		Application aribaApplication = null;
+		
+		//perform transaction to backend service 
+		aribaApplication = eurekaClient.getApplication("backend-service");
+		instanceInfo = aribaApplication.getInstances().get(0);
+		url = "http://" + instanceInfo.getIPAddr() + ":"+ instanceInfo.getPort() + "/" + "/getSuppPartneringInfo/";
+		
+		response = restTemplate.postForObject(url,supplierIds, String.class);
+
+		logger.info("Finishing order now transaction ");
+		
+		return response.toString();
+	}
+	
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
