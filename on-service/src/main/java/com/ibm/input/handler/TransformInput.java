@@ -34,7 +34,7 @@ public class TransformInput {
 
 	private static final String LINEITEM_NEED_BY_DATE = "lineitemNeedByDate";
 
-	private static final String LINE_ITEM_SEQ_NO = "lineItemSeqNo";
+	private static final String LINE_ITEM_SEQ_NO = "NumberInCollection";
 
 	private static final String LINE_ITEM_QTY = "lineItemQty";
 
@@ -66,9 +66,15 @@ public class TransformInput {
 
 	private static final String REQUISITION_NAME = "RequisitionName";
 
-	private static final String UNIQUE_TRANSACTION_NUMBER = "UniqueTransactionNumber";
+	private static final String UNIQUE_TRANSACTION_NUMBER = "UniqueName";
 	
 	private static final String ON_TYPE = "ORDERNOW";
+	
+	private static final String COST_CENTRE = "CostCenter";
+	private static final String WBSELEMENT = "WBSElement";
+	private static final String MANPARTNUMBER = "ManPartNumber";
+	private static final String SHIPTO = "ShipTo";
+	private static final String PURCHASEORG = "PurchOrg";
 
 	Logger logger = LoggerFactory.getLogger(TransformInput.class);
 	
@@ -156,6 +162,25 @@ public class TransformInput {
 		itemDTO.setValueOrder((String)parlist.get(VALUE_ORDER));
 		itemDTO.setStartDate((String)parlist.get(START_DATE));
 		itemDTO.setEndDate((String)parlist.get(END_DATE));
+		
+		if(parlist.containsKey(COST_CENTRE)) {
+			itemDTO.setCostCentre((String)parlist.get(COST_CENTRE));
+		}
+		if(parlist.containsKey(WBSELEMENT)) {
+			itemDTO.setWbsElement((String)parlist.get(WBSELEMENT));
+		}
+		
+		if(parlist.containsKey(MANPARTNUMBER)) {
+			itemDTO.setManPartNumber((String)parlist.get(MANPARTNUMBER));
+		}
+		
+		if(parlist.containsKey(SHIPTO)) {
+			itemDTO.setShipTo((String)parlist.get(SHIPTO));
+		}
+		
+		if(parlist.containsKey(PURCHASEORG)) {
+			itemDTO.setPurchaseOrg((String)parlist.get(PURCHASEORG));
+		}
 		
 		lineItems.add(itemDTO);
 	}
