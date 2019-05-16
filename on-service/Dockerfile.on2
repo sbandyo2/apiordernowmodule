@@ -1,0 +1,8 @@
+FROM anapsix/alpine-java:latest
+MAINTAINER ibm.com
+RUN apk --no-cache add netcat-openbsd
+COPY on2.jar .
+COPY on2-entrypoint.sh .
+RUN chmod +x on2-entrypoint.sh
+ENTRYPOINT ["sh","on2-entrypoint.sh"]
+EXPOSE 7083
