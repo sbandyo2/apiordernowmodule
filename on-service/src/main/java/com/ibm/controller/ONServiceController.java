@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +35,12 @@ public class ONServiceController {
 
 	@Autowired
 	private EurekaClient eurekaClient;
+	
+	@RequestMapping(value = "/pingService", method =RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+	public ResponseEntity<?> gettCSV(@PathVariable String fileId) {
+		logger.info("Pinging the Order now service");
+		return ResponseEntity.status(HttpStatus.OK).body("Ping successful");
+	}
 	
 	@HystrixCommand(fallbackMethod="reliable", commandProperties = {
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "40"), //default value ,number of request which will trip the circuit
