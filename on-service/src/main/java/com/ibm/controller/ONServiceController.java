@@ -37,7 +37,7 @@ public class ONServiceController {
 	private EurekaClient eurekaClient;
 	
 	@RequestMapping(value = "/pingService", method =RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<?> gettCSV(@PathVariable String fileId) {
+	public ResponseEntity<?> pingService() {
 		logger.info("Pinging the Order now service");
 		return ResponseEntity.status(HttpStatus.OK).body("Ping successful");
 	}
